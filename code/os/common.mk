@@ -63,14 +63,21 @@ ${OUTPUT_PATH}/%.o : %.c
 ${OUTPUT_PATH}/%.o : %.S
 	${CC} ${DEFS} ${CFLAGS} -c -o $@ $<
 
-run: all
+r: all
 	@${QEMU} -M ? | grep virt >/dev/null || exit
 	@echo "Press Ctrl-A and then X to exit QEMU"
 	@echo "------------------------------------"
 	@${QEMU} ${QFLAGS} -kernel ${ELF}
 
+rd: all
+	@${QEMU} -M ? | grep virt >/dev/null || exit
+	@echo "Press Ctrl-A and then X to exit QEMU"
+	@echo "------------------------------------"
+	@${QEMU} ${QFLAGS} -kernel ${ELF} -s -S
+
+
 .PHONY : debug
-debug: all
+d: all
 	@echo "Press Ctrl-C and then input 'quit' to exit GDB and QEMU"
 	@echo "-------------------------------------------------------"
 	@${QEMU} ${QFLAGS} -kernel ${ELF} -s -S &
